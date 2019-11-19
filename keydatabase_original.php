@@ -5,12 +5,12 @@
 	require('includes/fpdf181/fpdf.php');
 	session_start(); // Start the session.
 
-	// If no session value is present, redirect the user:
+	/*// If no session value is present, redirect the user:
 	// Also validate the HTTP_USER_AGENT!
-	/*if (!isset($_SESSION['agent']) OR ($_SESSION['agent'] != md5($_SERVER['HTTP_USER_AGENT'])) OR ($_SESSION['admin_level'] < 1) )
+	if (!isset($_SESSION['agent']) OR ($_SESSION['agent'] != md5($_SERVER['HTTP_USER_AGENT'])) OR ($_SESSION['admin_level'] < 1) )
 	{
 		// Need the functions:
-		require ('includes/login_functions.inc.php');
+		//require ('includes/login_functions.inc.php');
 		redirect_user('index.php');
 	}*/
 	require("includes/mysqli_connect.php");
@@ -46,7 +46,7 @@
 
 	else
 	{
-	    $dataid = (isset($_GET['dataid']))? $_GET['dataid']:'';
+	  $dataid = (isset($_GET['dataid']))? $_GET['dataid']:'';
 		$lastname = (isset($_GET['lastname']))? $_GET['lastname']:'';
 		$firstname = (isset($_GET['firstname']))? $_GET['firstname']:'';
 		$employeenum = (isset($_GET['employeenum']))? $_GET['employeenum']:'';
@@ -81,103 +81,103 @@
 
 	$display = 15;
 
-	if($lastname != '' || $firstname != '' || $employeenum != '' || $ssn != '' || $iso != '' || $disposition != '' || $dispositiondate != '' || $idlink != '' || $empbld != '' || $emprm != '' || $tag != '' || $keyname != '' || $series != '' || $keybld != '' || $keyrm != '' || $issuedate != '' || $department != '' || $receiptdate != '' || $status != '')
-	{
-		if($lastname != '')
+	/*if($lastname != '' || $firstname != '' || $employeenum != '' || $ssn != '' || $iso != '' || $disposition != '' || $dispositiondate != '' || $costcenter != '' || $empbld != '' || $emprm != '' || $tag != '' || $keyname != '' || $series != '' || $keybld != '' || $keyrm != '' || $issuedate != '' || $department != '' || $receiptdate != '' || $status != '')
+	{*/
+    
+    if($lastname != '')
 		{
 		$query = "SELECT * FROM key_database WHERE lastname = '$lastname' ORDER BY 'lastname' LIMIT $start,$display";
 		$query2 = "SELECT * FROM key_database WHERE lastname = '$lastname'";
 	}
-		if($firstname != '')
+    else if($firstname != '')
 		{
 		$query = "SELECT * FROM key_database WHERE firstname = '$firstname' ORDER BY firstname LIMIT $start,$display";
 		$query2 = "SELECT * FROM key_database WHERE firstname = '$firstname'";
 	}
-		if($employeenum != '')
+    else if($employeenum != '')
 		{
 		$query = "SELECT * FROM key_database WHERE employeenum = '$employeenum' ORDER BY employeenum LIMIT $start,$display";
 		$query2 = "SELECT * FROM key_database WHERE employeenum = '$employeenum'";
 	}
-		if($ssn != '')
+    else if($ssn != '')
 		{
 		$query = "SELECT * FROM key_database WHERE ssn = '$ssn' ORDER BY ssn LIMIT $start,$display";
 		$query2 = "SELECT * FROM key_database WHERE ssn = '$ssn'";
 	}
-		if($iso != '')
+    else if($iso != '')
 		{
 		$query = "SELECT * FROM key_database WHERE iso = '$iso' ORDER BY iso LIMIT $start,$display";
 		$query2 = "SELECT * FROM key_database WHERE iso = '$iso'";
 	}
-		if($disposition != '')
+    else if($disposition != '')
 		{
 		$query = "SELECT * FROM key_database WHERE disposition = '$disposition' ORDER BY disposition LIMIT $start,$display";
 		$query2 = "SELECT * FROM key_database WHERE disposition = '$disposition'";
 	}
-		if($dispositiondate != '')
+    else if($dispositiondate != '')
 		{
 		$query = "SELECT * FROM key_database WHERE dispositiondate = '$dispositiondate' ORDER BY dispositiondate LIMIT $start,$display";
 		$query2 = "SELECT * FROM key_database WHERE dispositiondate = '$dispositiondate'";
 	}
-		if($idlink != '')
+    else if($idlink != '')
 		{
 		$query = "SELECT * FROM key_database WHERE idlink = '$idlink' ORDER BY idlink LIMIT $start,$display";
 		$query2 = "SELECT * FROM key_database WHERE idlink = '$idlink'";
 	}
-		if($empbld != '')
+    else if($empbld != '')
 		{
 		$query = "SELECT * FROM key_database WHERE empbld = '$empbld' ORDER BY empbld LIMIT $start,$display";
 		$query2 = "SELECT * FROM key_database WHERE empbld = '$empbld'";
 	}
-		if($emprm != '')
+    else if($emprm != '')
 		{
 		$query = "SELECT * FROM key_database WHERE emprm = '$emprm' ORDER BY emprm LIMIT $start,$display";
 		$query2 = "SELECT * FROM key_database WHERE emprm = '$emprm'";
 	}
-		if($tag != '')
+    else if($tag != '')
 		{
 		$query = "SELECT * FROM key_database WHERE tag = '$tag' ORDER BY tag LIMIT $start,$display";
 		$query2 = "SELECT * FROM key_database WHERE tag = '$tag'";
 	}
-		if($keyname != '')
+    else if($keyname != '')
 		{
 		$query = "SELECT * FROM key_database WHERE keyname = '$keyname' ORDER BY keyname LIMIT $start,$display";
 		$query2 = "SELECT * FROM key_database WHERE keyname = '$keyname'";
 	}
-		if($series != '')
+    else if($series != '')
 		{
 		$query = "SELECT * FROM key_database WHERE series = '$series' ORDER BY series LIMIT $start,$display";
 		$query2 = "SELECT * FROM key_database WHERE series = '$series'";
 	}
-		if($keybld != '')
+    else if($keybld != '')
 		{
 		$query = "SELECT * FROM key_database WHERE keybld = '$keybld' ORDER BY keybld LIMIT $start,$display";
 		$query2 = "SELECT * FROM key_database WHERE keybld = '$keybld'";
 	}
-		if($keyrm != '')
+    else if($keyrm != '')
 		{
 		$query = "SELECT * FROM key_database WHERE keyrm = '$keyrm' ORDER BY keyrm LIMIT $start,$display";
 		$query2 = "SELECT * FROM key_database WHERE keyrm = '$keyrm'";
 	}
-		if($issuedate != '')
+    else if($issuedate != '')
 		{
 		$query = "SELECT * FROM key_database WHERE issuedate = '$issuedate' ORDER BY issuedate LIMIT $start,$display";
 		$query2 = "SELECT * FROM key_database WHERE issuedate = '$issuedate'";
 	}
-		if($department != '')
+    else if($department != '')
 		{
 		$query = "SELECT * FROM key_database WHERE department = '$department' ORDER BY department LIMIT $start,$display";
 		$query2 = "SELECT * FROM key_database WHERE department = '$department'";
 	}
-		if($receiptdate != '')
+    else if($receiptdate != '')
 		{
 		$query = "SELECT * FROM key_database WHERE receiptdate = '$receiptdate' ORDER BY receiptdate LIMIT $start,$display";
 		$query2 = "SELECT * FROM key_database WHERE receiptdate = '$receiptdate'";
 	}
-		if($status != '')
+    else if($status != '')
 		{
 		$query = "SELECT * FROM key_database WHERE status = '$status' ORDER BY status LIMIT $start,$display";
 		$query2 = "SELECT * FROM key_database WHERE status = '$status'";
-	}
 	}
 	else
 	{
@@ -186,8 +186,8 @@
 	}
 
 
-	$result = mysqli_query($dbc, $query);
-	$rscount = mysqli_query($dbc, $query2);
+	$result = @mysqli_query($dbc, $query);
+	$rscount = @mysqli_query($dbc, $query2);
 	$records = mysqli_num_rows($rscount);
 
 	if (isset($_GET['p']) && is_numeric($_GET['p'])) //Get the number of pages, either from $_GET or calculate from query results
@@ -274,13 +274,12 @@ body{
 		<form id = "key-search" action=" " method="post" name = "key-search" >
 			<input type="text" placeholder = 'Search' name = "name" id = "name">
 
-                <?php
-                    /*$q = "SELECT DISTINCT lastname FROM key_database WHERE lastname != '' ORDER BY dataid";
-                    $rs = @mysqli_query($dbc, $q);
+			<?php
+				/*$q = "SELECT DISTINCT lastname FROM key_database WHERE lastname != '' ORDER BY dataid";
+				$rs = @mysqli_query($dbc, $q);
 
-                    mysqli_free_result($rs);*/
-                ?>
-            
+				mysqli_free_result($rs);*/
+			?>
 			<select name = "keybld" class = "search-select" id = "keybld" style = "width:150px">
 			<option value = 'all' <?php if($keybld ==''){echo 'selected';}?>>All Buildings</option>
 			<?php
@@ -302,7 +301,6 @@ body{
 			<select name = "department" class = "search-select" id = "department" style = "width:200px">
 					<option value = "all">Department<option>
 					<?php
-                /*change here*/
 					$q = "SELECT dep, idlink FROM department ORDER BY dep";
 					$rs = @mysqli_query($dbc, $q);
 					while($ro = mysqli_fetch_array($rs))
@@ -328,8 +326,8 @@ body{
 
 			<br>
 			<label>Search By: </label>
-			<input type = "checkbox" id = "check-tag" value = "tag">Tag</input>
-			<input type = "checkbox" id = "check-key" style = "margin-left: 10px" value = "keyname">Key</input>
+			<input type = "checkbox" id = "check-tag" value = "tag">Tag
+			<input type = "checkbox" id = "check-key" style = "margin-left: 10px" value = "keyname">Key
 			<!--<input type = "checkbox" id = "check-dep" style = "margin-left: 10px" value = "department">Department/Costcenter</input>-->
 
 			<hr>
@@ -341,17 +339,6 @@ body{
 		<form action="pdf_key_reciept_transfer_returnreport.php" method="post" >
 
 	</div>
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	<script>
 	function filter(){
 		console.log("filter");
@@ -379,17 +366,6 @@ body{
 
 
 	</script>
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 
 	<?php
 		echo'<div style="margin-left: 100px;">';
@@ -417,15 +393,7 @@ body{
 			echo '<a style ="margin-left:20px;" href= "" class="btn btn-danger" tabindex="0" id = "delete" onClick="deleteConfirm()">Delete Key</a>';
 		}
 		echo '</div>';
-		
-    
-    
-    
-    
-        
-    
-    
-        echo "<br><br>";
+		echo "<br><br>";
 		echo '<thead>';
 		$order = 'issuedate';
 		/*if (isset ($_GET['order'])){
@@ -461,38 +429,36 @@ body{
 			<th><b>Issue Date</b></th>';
 		echo '</thead>';
 
-	while($row = mysqli_fetch_array($result))
+	while($row = mysqli_fetch_assoc($result))
 	{
 		$dataid = $row['dataid'];
-		$q = "SELECT key_database.* FROM key_database WHERE dataid={$dataid} ORDER BY {$order}, {$sort} ";
-		$rs = mysqli_query($dbc, $q);
+		$q = "SELECT * FROM key_database WHERE dataid=$dataid ORDER BY $order $sort ";
+		$rs = @mysqli_query($dbc, $q);
 
-		
-        
-        
-        while($row2 = mysqli_fetch_assoc($rs))
-		{
-			// this is only to get the department
-
-			$qq = "SELECT dep FROM department WHERE idlink = '".$row2['idlink']."'";
-			$rr = mysqli_query($dbc, $qq);
-			$r3 = mysqli_fetch_array($rr);
-			if(mysqli_num_rows($rr)==0){
-				$dep = $row2['department'];
-
-			}else{
-				$dep = $r3[0];
-			}
+		while($row2 = mysqli_fetch_array($rs))
+		{ 
+            while($row2 = mysqli_fetch_assoc($rs)){
+            
+            // this is only to get the department
+            $qq = "SELECT dep FROM department WHERE idlink = '".$row2['idlink']."'";
+            $rr = mysqli_query($dbc, $qq);
+            $r3 = mysqli_fetch_array($rr);
+            if(mysqli_num_rows($rr)==0){
+                $dep = $row2['department'];
+            }else{
+                $dep = $r3[0];
+            }}}
+            
 			/////////////////////////////////////
 
 			// This is  color coding dispositions
 
 			///////
-
+        
 
 			echo '<tr bgcolor = "">';
 			echo '<td>';?>
-			<input type = "checkbox" name = "checklist[]" class="checklist" value ="<?php echo $row2['dataid'];?>"	/>
+			<input type = "checkbox" name = "checklist[]" class="checklist" value ="<?php echo $row['dataid'];?>"	/>
 			<input type = "submit" id ="submit-checked" name = "submit-checked" class = "hidden"/>
 			<input type = "submit" id ="submit-checked-transfer" name = "submit-checked-transfer" class = "hidden"/>
 			<input type = "submit" id ="submit-checked-report" name = "submit-checked-report" class = "hidden"/>

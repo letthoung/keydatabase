@@ -161,11 +161,11 @@
 		$query = "SELECT * FROM key_database WHERE issuedate = '$issuedate' ORDER BY issuedate LIMIT $start,$display";
 		$query2 = "SELECT * FROM key_database WHERE issuedate = '$issuedate'";
 	}
-		if($department != '')
+		/*if($department != '')
 		{
 		$query = "SELECT * FROM key_database WHERE department = '$department' ORDER BY department LIMIT $start,$display";
 		$query2 = "SELECT * FROM key_database WHERE department = '$department'";
-	}
+	}*/
 		if($receiptdate != '')
 		{
 		$query = "SELECT * FROM key_database WHERE receiptdate = '$receiptdate' ORDER BY receiptdate LIMIT $start,$display";
@@ -179,8 +179,8 @@
 	}
 	else
 	{
-		$query = "SELECT key_database.* FROM key_database Order By dataid DESC LIMIT $start,$display";
-		$query2 = "SELECT key_database.* FROM key_database";
+		$query = "SELECT * FROM key_database Order By dataid DESC LIMIT $start,$display";
+		$query2 = "SELECT * FROM key_database";
 	}
     
     
@@ -294,7 +294,7 @@ body{
                 <?php
                 /*change here*/
                 $q = "SELECT dep, idlink FROM department ORDER BY dep";
-                $rs = @mysqli_query($dbc, $q);
+                $rs = mysqli_query($dbc, $q);
                 while($ro = mysqli_fetch_array($rs))
                 {
                     echo '<option value = "' . $ro['idlink'] . '" ';
@@ -327,18 +327,256 @@ body{
 			<input type = "submit" class = "btn btn-default" name = "search-box">
 			<a href = "keydatabase.php" class="btn btn-default">Clear Search</a>
 			<br>
-		</form>
-	</div>
+		</form>	
+    </div>
+   
+   
+   <?php
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+        echo "<br><br>";
+		echo '<thead>';
+		$order = 'issuedate';
+		/*if (isset ($_GET['order'])){
+			$order = $_GET['order'];
+		}
+		else{
+			$order = 'dataid';
+		}*/
+		if (isset ($_GET['sort'])){
+            $sort = $_GET['sort'];
+		}
+		else{
+            $sort = 'DESC';
+		}
+		echo '
+			<th><input type = "checkbox" id = "checkall" name="checkall" value =""></th>
+			<th><b>Campus Group</b></th>
+			<th><b>Last Name </b></th>
+			<th><b>First Name</b></th>
+			<th><b>Employee Number</b></th>
+			<th><b>ISO</b></th>
+			<th><b>Department</b></th>
+			<!--<th ><b>Cost Center</b></th>-->
+			<!--<th><b>Employee Building</b></th>-->
+			<!--<th><b>Employee Room</b></th>-->
+			<th><b>Tag Number</b></th>
+			<th><b>Key</b></th>
+			<th><b>Series #</b></th>
+			<th><b>Key Building</b></th>
+			<th><b>Key Room</b></th>
+			<th><b>Disposition</b></th>
+			<th><b>Disposition Date</b></th>
+			<th><b>Issue Date</b></th>';
+		echo '</thead>';
+   
+    
+    
+    
+    
+        /*while($row2 = mysqli_fetch_assoc($rs)){
+        // this is only to get the department
+        $qq = "SELECT dep FROM department WHERE idlink = '".$row2['idlink']."'";
+        $rr = mysqli_query($dbc, $qq);
+        $r3 = mysqli_fetch_array($rr);
+        if(mysqli_num_rows($rr)==0){
+            $dep = $row2['department'];
+
+        }else{
+            $dep = $r3[0];
+        }
     
     
     
     
     
+        /////////////////////////////////////
+
+        // This is  color coding dispositions
+
+        ///////
+
+
+        echo '<tr bgcolor = "">';
+        echo '<td>';?>
+        <input type = "checkbox" name = "checklist[]" class="checklist" value ="<?php echo $row2['dataid'];?>"	/>
+        <input type = "submit" id ="submit-checked" name = "submit-checked" class = "hidden"/>
+        <input type = "submit" id ="submit-checked-transfer" name = "submit-checked-transfer" class = "hidden"/>
+        <input type = "submit" id ="submit-checked-report" name = "submit-checked-report" class = "hidden"/>
+        <input type = "submit" id ="submit-checked-excel" name = "submit-checked-excel" class = "hidden"/>
+
+        <?php echo '</td>';
+        echo '<td>' . $row2['status'] . '</td>';
+        echo '<td><a href = "keydatabase_details.php?id=' . $dataid . '" target = "_blank">' . $row2['lastname'] . '</a></td>';
+        echo '<td>' . $row2['firstname'] . '</td>';
+        echo '<td>' . $row2['employeenum'] . '</td>';
+        echo '<td>' . $row2['iso'] . '</td>';
+        echo '<td><a href = "department.php?c='.$row2['idlink'].'&id='.$dataid.'">' . $dep. '</a></td>';
+        //echo '<td>' . $row2['costcenter'] . '</td>';
+        //echo '<td>' . $row2['empbld'] . '</td>';
+        //echo '<td>' . $row2['emprm'] . '</td>';
+        echo '<td><a href = "search_by_lastname.php?tagfromlink='.$row2['tag'].'" >' . $row2['tag'] . '</a></td>';
+        echo '<td><a href = "search_by_key.php?keyNum=' . $row2['keyname'] . '" target = "_blank">' . $row2['keyname'] . '</a></td>';
+        echo '<td>' . $row2['series'] . '</td>';
+        echo '<td>' . $row2['keybld'] . '</td>';
+        echo '<td>' . $row2['keyrm'] . '</td>';
+        echo '<td>' . $row2['disposition'] . '</td>';
+        echo '<td>' . $row2['dispositiondate'] . '</td>';
+        echo '<td>' . $row2['issuedate'] . '</td>';
+        echo '</tr>';
+    }
+		}
+		mysqli_free_result($rs);
+	}
+	mysqli_free_result($result);
+
+	echo '</table>';
+	echo '</form>';*/
+?>
     
     
     
     
+<script>
+    function load(){
+
+        var tr = document.getElementsByTagName("tr");
+        for (var i = 0; i < tr.length ; i++){
+            var disp = tr[i].childNodes[12].innerText;
+
+            if (disp == 'Processing'){
+                tr[i].style.backgroundColor = "#fc5353";
+                tr[i].style.color = "#ffffff";
+            }
+            if (disp == 'No Receipt'){
+                tr[i].style.backgroundColor = "#FFFF00";
+                //tr[i].style.color = "#ffffff";
+            }
+            if (disp == 'Returned'){
+                tr[i].style.backgroundColor = "#D3D3D3";
+                //tr[i].style.color = "#ffffff";
+            }
+        }
+    }
+    function deleteConfirm(){
+        if(confirm("You are about to delete key(s), are you sure you want to do that?")){
+            deleteSelected();
+        }else{
+
+        }
+
+    }
+    function deleteSelected(){
+        var checkboxes = document.getElementsByClassName("checklist");
+        var id = [];
+        for (var j = 0; j < checkboxes.length; j++){
+            if(checkboxes[j].checked){
+                id.push(checkboxes[j].value);
+            }
+        }
+
+
+        var link = "delete_key.php?";
+        for (var i = 0; i < id.length; i++){
+            if (i <id.length - 1){
+                link = link+"id[]="+id[i]+"&";
+            }
+            else{
+                link = link+"id[]="+id[i];
+            }
+
+        }
+
+        document.getElementById("delete").href = link;
+        console.log(link);
+    }
+    function triggerReturn(){
+        var checkboxes = document.getElementsByClassName("checklist");
+        var id = [];
+        //console.log(checkboxes);
+        for (var i = 0; i < checkboxes.length; i++){
+            if(checkboxes[i].checked){
+                id.push(checkboxes[i].value);
+            }
+        }
+        //console.log(id);
+        var link = "trigger_return.php?";
+        for (var i = 0; i < id.length; i++){
+            if (i <id.length - 1){
+                link = link+"id[]="+id[i]+"&";
+            }
+            else{
+                link = link+"id[]="+id[i];
+            }
+    }
+    document.getElementById("trigger").href = link;
+    //console.log(link);
+
+    }
+    function assignKey(){
+        var checkboxes = document.getElementsByClassName("checklist");
+        var id = [];
+        for (var i = 0; i < checkboxes.length; i++){
+            if(checkboxes[i].checked){
+                id.push(checkboxes[i].value);
+            }
+        }
+        if(confirm("You are changing the Dispostions of the selected keys")){
+
+            $.ajax({
+                type: "GET",
+                url: "assign_key.php",
+                data:{
+                    idList: id,
+                },
+                dataType: "JSON",
+                success: function(data){
+                }
+
+            });
+
+        }
+    }
+    </script>
     
+    <center>
+        <ul class = "pagination">
+        <?php
+
+            if($pages > 1) //Set up pages if necessary
+            {
+                $link = 'keydatabase.php?dataid=' . $dataid. '&p=' . $pages . '&lastname=' .$lastname . '&firstname=' .$firstname . '&employeenum=' .$employeenum . '&ssn=' .$ssn .'&iso=' . $iso . '&disposition=' . $disposition . '&dispositiondate=' . $dispositiondate . '&idlink=' . $idlink . '&empbld=' . $empbld . '&emprm=' . $emprm . '&tag=' . $tag . '&keyname=' . $keyname . '&series=' . $series . '&keybld=' . $keybld . '&keyrm=' . $keyrm . '&issuedate=' . $issuedate . '&department=' . $department . '&receiptdate=' . $receiptdate . '&status=' . $status;
+                echo paginate($pages, $start, $display, $link);
+            }
+            include ('includes/footer.html');
+        ?>
+        </ul>
+    </center>
+</body>
+</html>
     
     
     

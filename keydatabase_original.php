@@ -428,19 +428,19 @@ body{
 	while($row = mysqli_fetch_array($result))
 	{
 		$dataid = $row['dataid'];
-		$q = "SELECT key_database.* FROM key_database WHERE dataid=$dataid ORDER BY $order $sort ";
+		$q = "SELECT key_database.* FROM key_database WHERE dataid=$dataid ORDER BY $order, $sort ";
 		$rs = @mysqli_query($dbc, $q);
 
-		while($row2 = mysqli_fetch_array($rs))
+		while($row2 = mysqli_fetch_assoc($rs))
 		{
 			// this is only to get the department
-
-			$qq = "SELECT dep FROM department WHERE costcenter = '".$row2['costcenter']."'";
+            $idlink = $row2['idlink'];
+			$qq = "SELECT dep FROM department WHERE idlink = '$idlink'";
 			$rr = mysqli_query($dbc, $qq);
 			$r3 = mysqli_fetch_array($rr);
 			if(mysqli_num_rows($rr)==0){
 				$dep = $row2['department'];
-
+                echo "<h1>HERE!!!</h1>";
 			}else{
 				$dep = $r3[0];
 			}

@@ -1,12 +1,14 @@
 <?php
 	session_start(); // Start the session.
+/*
 	require ('includes/login_functions.inc.php');
+*/
 	// If no session value is present, redirect the user:
 	// Also validate the HTTP_USER_AGENT!
-	if (!isset($_SESSION['agent']) OR ($_SESSION['agent'] != md5($_SERVER['HTTP_USER_AGENT'])) )
+	/*if (!isset($_SESSION['agent']) OR ($_SESSION['agent'] != md5($_SERVER['HTTP_USER_AGENT'])) )
 	{
 		redirect_user('index.php');
-	}
+	}*/
 	//This page will be used to edit exterior light records. If the user is of a sufficient admin level it makes the changes to the exterior_lights table.
 	//If they are not it submits the edits to be made so that an admin can look at them and either accept or deny them.
 
@@ -160,10 +162,15 @@
 			if(!empty($_POST['department']))
 		{
 			$department = $_POST['department'];
+            $query = "SELECT idlink FROM department WHERE dep = '$department'";
+            $idlink_query = mysqli_query($dbc, $query);
+            $row = mysqli_fetch_assoc($idlink_query);
+            $idlink = $row['idlink'];
 		}
 		else
 		{
 			$department = NULL;
+            $idlink = 0;
 		}
 			if(!empty($_POST['receiptdate']))
 		{
@@ -186,14 +193,14 @@
 		//If no errors were detected during validation
 		if(empty($errors))
 		{
-			if($_SESSION['admin_level'] >= 2)//These users have authority to directly make changes to records.
-			{
+			/*if($_SESSION['admin_level'] >= 2)//These users have authority to directly make changes to records.
+			{*/
 				//Prepare a statement to send to the database with all new values.
-				$query = "INSERT INTO key_database ( lastname, firstname, employeenum, ssn, iso, disposition, dispositiondate, costcenter, empbld, emprm, tag, keyname, series, keybld, keyrm, issuedate, department, receiptdate, status)";
-				$query.=" VALUES ('".mysqli_real_escape_string($dbc,$lastname)."', '".mysqli_real_escape_string($dbc,$firstname)."', '$employeenum', '$ssn', '$iso', '$disposition', '$dispositiondate', '$costcenter', '$empbld', '$emprm', '$tag', '$keyname', '$series', '$keybld', '$keyrm', '$issuedate', '".mysqli_real_escape_string($dbc,$department)."', '$receiptdate', '".mysqli_real_escape_string($dbc,$status)."')";
+				$query = "INSERT INTO key_database ( lastname, firstname, employeenum, iso, disposition, dispositiondate, costcenter, empbld, emprm, tag, keyname, series, keybld, keyrm, issuedate, department, receiptdate, status, idlink)";
+				$query.=" VALUES ('".mysqli_real_escape_string($dbc,$lastname)."', '".mysqli_real_escape_string($dbc,$firstname)."', '$employeenum', '$iso', '$disposition', '$dispositiondate', '$costcenter', '$empbld', '$emprm', '$tag', '$keyname', '$series', '$keybld', '$keyrm', '$issuedate', '".mysqli_real_escape_string($dbc,$department)."', '$receiptdate', '".mysqli_real_escape_string($dbc,$status)."', '$idlink')";
 				$result = @mysqli_query($dbc, $query);
 				if(!$result) {
-				die('Query FAILED <br>'. mysqli_error($dbc));
+				die('Query FAILED <br>'. mysqli_error($dbc). '    id '. "$idlink". '   dep ' . "$department");
 
 				} else {
 
@@ -204,8 +211,8 @@
 				recordTimestamp($userfirstname , $userlastname ,$action );
 
 				}
-
-			}
+/*
+			}*/
 
 		}
 	}

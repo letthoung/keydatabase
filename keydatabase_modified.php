@@ -5,17 +5,17 @@
 	require('includes/fpdf181/fpdf.php');
 	session_start(); // Start the session.
 
-	// If no session value is present, redirect the user:
+	//If no session value is present, redirect the user:
 	// Also validate the HTTP_USER_AGENT!
-    /*comment out login */
-	/*if (!isset($_SESSION['agent']) OR ($_SESSION['agent'] != md5($_SERVER['HTTP_USER_AGENT'])) OR ($_SESSION['admin_level'] < 1) )
+
+    if (!isset($_SESSION['agent']) OR ($_SESSION['agent'] != md5($_SERVER['HTTP_USER_AGENT'])) OR ($_SESSION['admin_level'] < 1) )
 	{
 		// Need the functions:
 		require ('includes/login_functions.inc.php');
 		redirect_user('index.php');
-	}*/
+	}
 	require("includes/mysqli_connect.php");
-	/*require ('includes/login_functions.inc.php');*/
+	require ('includes/login_functions.inc.php');
 	$page_title = 'Key Database';
 	include ('includes/header.html');
 
@@ -174,7 +174,7 @@
 		$query2 = "SELECT * FROM key_database WHERE status = '$status'";
 	}
 	}
-	else // Default query when nothing is selected. This is when the page is first loaded
+	else
 	{
 		$query = "SELECT key_database.* FROM key_database Order By dataid DESC LIMIT $start,$display";
 		$query2 = "SELECT key_database.* FROM key_database";
@@ -428,19 +428,18 @@ body{
 	while($row = mysqli_fetch_array($result))
 	{
 		$dataid = $row['dataid'];
-		$q = "SELECT key_database.* FROM key_database WHERE dataid=$dataid ORDER BY $order $sort ";
+		$q = "SELECT * FROM key_database WHERE dataid = $dataid ORDER BY $order $sort ";
 		$rs = @mysqli_query($dbc, $q);
 
-		while($row2 = mysqli_fetch_array($rs))
+		while($row2 = mysqli_fetch_assoc($rs))
 		{
 			// this is only to get the department
-
-			$qq = "SELECT dep FROM department WHERE costcenter = '".$row2['costcenter']."'";
+            $idlink = $row2['idlink'];
+			$qq = "SELECT dep FROM department WHERE idlink = $idlink";
 			$rr = mysqli_query($dbc, $qq);
 			$r3 = mysqli_fetch_array($rr);
 			if(mysqli_num_rows($rr)==0){
 				$dep = $row2['department'];
-
 			}else{
 				$dep = $r3[0];
 			}

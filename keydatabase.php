@@ -5,22 +5,22 @@
 	require('includes/fpdf181/fpdf.php');
 	session_start(); // Start the session.
 
-	// If no session value is present, redirect the user:
+	//If no session value is present, redirect the user:
 	// Also validate the HTTP_USER_AGENT!
-	/*if (!isset($_SESSION['agent']) OR ($_SESSION['agent'] != md5($_SERVER['HTTP_USER_AGENT'])) OR ($_SESSION['admin_level'] < 1) )
+
+    /*if (!isset($_SESSION['agent']) OR ($_SESSION['agent'] != md5($_SERVER['HTTP_USER_AGENT'])) OR ($_SESSION['admin_level'] < 1) )
 	{
 		// Need the functions:
 		require ('includes/login_functions.inc.php');
 		redirect_user('index.php');
 	}*/
 	require("includes/mysqli_connect.php");
-	//require ('includes/login_functions.inc.php');
+	/*require ('includes/login_functions.inc.php');*/
 	$page_title = 'Key Database';
 	include ('includes/header.html');
 
-
-		if ($_SERVER['REQUEST_METHOD'] == 'POST') //Get information from the form if user submitted a search
-	{
+    //Get information from the form if user submitted a search
+    if ($_SERVER['REQUEST_METHOD'] == 'POST'){
 		$dataid = $_POST['dataid'];
 		$lastname = $_POST['lastname'];
 		$firstname = $_POST['firstname'];
@@ -29,7 +29,7 @@
 		$iso = $_POST['iso'];
 		$disposition = $_POST['disposition'];
 		$dispositiondate = $_POST['dispositiondate'];
-		$idlink = $_POST['idlink'];
+		$costcenter = $_POST['costcenter'];
 		$empbld = $_POST['empbld'];
 		$emprm = $_POST['emprm'];
 		$tag = $_POST['tag'];
@@ -41,12 +41,9 @@
 		$department = $_POST['department'];
 		$receiptdate = $_POST['receiptdate'];
 		$status = $_POST['status'];
-
-	}
-
-	else
-	{
-	    $dataid = (isset($_GET['dataid']))? $_GET['dataid']:'';
+        
+	} else {
+        $dataid = (isset($_GET['dataid']))? $_GET['dataid']:'';
 		$lastname = (isset($_GET['lastname']))? $_GET['lastname']:'';
 		$firstname = (isset($_GET['firstname']))? $_GET['firstname']:'';
 		$employeenum = (isset($_GET['employeenum']))? $_GET['employeenum']:'';
@@ -54,7 +51,7 @@
 		$iso = (isset($_GET['iso']))? $_GET['iso']:'';
 		$disposition = (isset($_GET['disposition']))? $_GET['disposition']:'';
 		$dispositiondate = (isset($_GET['dispositiondate']))? $_GET['dispositiondate']:'';
-		$idlink = (isset($_GET['idlink']))? $_GET['idlink']:'';
+		$costcenter = (isset($_GET['costcenter']))? $_GET['costcenter']:'';
 		$empbld = (isset($_GET['empbld']))? $_GET['empbld']:'';
 		$emprm = (isset($_GET['emprm']))? $_GET['emprm']:'';
 		$tag = (isset($_GET['tag']))? $_GET['tag']:'';
@@ -66,7 +63,6 @@
 		$department = (isset($_GET['department']))? $_GET['department']:'';
 		$receiptdate = (isset($_GET['receiptdate']))? $_GET['receiptdate']:'';
 		$status = (isset($_GET['status']))? $_GET['status']:'';
-
 
 	}
 
@@ -81,13 +77,12 @@
 
 	$display = 15;
 
-	if($lastname != '' || $firstname != '' || $employeenum != '' || $ssn != '' || $iso != '' || $disposition != '' || $dispositiondate != '' || $idlink != '' || $empbld != '' || $emprm != '' || $tag != '' || $keyname != '' || $series != '' || $keybld != '' || $keyrm != '' || $issuedate != '' || $department != '' || $receiptdate != '' || $status != '')
-	{
+	if($lastname != '' || $firstname != '' || $employeenum != '' || $ssn != '' || $iso != '' || $disposition != '' || $dispositiondate != '' || $costcenter != '' || $empbld != '' || $emprm != '' || $tag != '' || $keyname != '' || $series != '' || $keybld != '' || $keyrm != '' || $issuedate != '' || $department != '' || $receiptdate != '' || $status != '') {
 		if($lastname != '')
 		{
 		$query = "SELECT * FROM key_database WHERE lastname = '$lastname' ORDER BY 'lastname' LIMIT $start,$display";
 		$query2 = "SELECT * FROM key_database WHERE lastname = '$lastname'";
-	}
+    }
 		if($firstname != '')
 		{
 		$query = "SELECT * FROM key_database WHERE firstname = '$firstname' ORDER BY firstname LIMIT $start,$display";
@@ -118,10 +113,10 @@
 		$query = "SELECT * FROM key_database WHERE dispositiondate = '$dispositiondate' ORDER BY dispositiondate LIMIT $start,$display";
 		$query2 = "SELECT * FROM key_database WHERE dispositiondate = '$dispositiondate'";
 	}
-		if($idlink != '')
+		if($costcenter != '')
 		{
-		$query = "SELECT * FROM key_database WHERE idlink = '$idlink' ORDER BY idlink LIMIT $start,$display";
-		$query2 = "SELECT * FROM key_database WHERE idlink = '$idlink'";
+		$query = "SELECT * FROM key_database WHERE costcenter = '$costcenter' ORDER BY costcenter LIMIT $start,$display";
+		$query2 = "SELECT * FROM key_database WHERE costcenter = '$costcenter'";
 	}
 		if($empbld != '')
 		{
@@ -186,8 +181,8 @@
 	}
 
 
-	$result = mysqli_query($dbc, $query);
-	$rscount = mysqli_query($dbc, $query2);
+	$result = @mysqli_query($dbc, $query);
+	$rscount = @mysqli_query($dbc, $query2);
 	$records = mysqli_num_rows($rscount);
 
 	if (isset($_GET['p']) && is_numeric($_GET['p'])) //Get the number of pages, either from $_GET or calculate from query results
@@ -274,13 +269,13 @@ body{
 		<form id = "key-search" action=" " method="post" name = "key-search" >
 			<input type="text" placeholder = 'Search' name = "name" id = "name">
 
-                <?php
-                    /*$q = "SELECT DISTINCT lastname FROM key_database WHERE lastname != '' ORDER BY dataid";
-                    $rs = @mysqli_query($dbc, $q);
+			<?php
+				/*$q = "SELECT DISTINCT lastname FROM key_database WHERE lastname != '' ORDER BY dataid";
+				$rs = @mysqli_query($dbc, $q);
 
-                    mysqli_free_result($rs);*/
-                ?>
-            
+				mysqli_free_result($rs);*/
+			?>
+		</input>
 			<select name = "keybld" class = "search-select" id = "keybld" style = "width:150px">
 			<option value = 'all' <?php if($keybld ==''){echo 'selected';}?>>All Buildings</option>
 			<?php
@@ -302,12 +297,11 @@ body{
 			<select name = "department" class = "search-select" id = "department" style = "width:200px">
 					<option value = "all">Department<option>
 					<?php
-                /*change here*/
-					$q = "SELECT dep, idlink FROM department ORDER BY dep";
+					$q = "SELECT dep, costcenter FROM department ORDER BY dep";
 					$rs = @mysqli_query($dbc, $q);
 					while($ro = mysqli_fetch_array($rs))
 					{
-						echo '<option value = "' . $ro['idlink'] . '" ';
+						echo '<option value = "' . $ro['costcenter'] . '" ';
 						echo '>' . $ro['dep'] . '</option>';
 					}
 				mysqli_free_result($rs);
@@ -341,17 +335,6 @@ body{
 		<form action="pdf_key_reciept_transfer_returnreport.php" method="post" >
 
 	</div>
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	<script>
 	function filter(){
 		console.log("filter");
@@ -379,17 +362,6 @@ body{
 
 
 	</script>
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 
 	<?php
 		echo'<div style="margin-left: 100px;">';
@@ -417,15 +389,7 @@ body{
 			echo '<a style ="margin-left:20px;" href= "" class="btn btn-danger" tabindex="0" id = "delete" onClick="deleteConfirm()">Delete Key</a>';
 		}
 		echo '</div>';
-		
-    
-    
-    
-    
-        
-    
-    
-        echo "<br><br>";
+		echo "<br><br>";
 		echo '<thead>';
 		$order = 'issuedate';
 		/*if (isset ($_GET['order'])){
@@ -464,22 +428,18 @@ body{
 	while($row = mysqli_fetch_array($result))
 	{
 		$dataid = $row['dataid'];
-		$q = "SELECT key_database.* FROM key_database WHERE dataid={$dataid} ORDER BY {$order}, {$sort} ";
-		$rs = mysqli_query($dbc, $q);
+		$q = "SELECT * FROM key_database WHERE dataid = $dataid ORDER BY $order $sort ";
+		$rs = @mysqli_query($dbc, $q);
 
-		
-        
-        
-        while($row2 = mysqli_fetch_assoc($rs))
+		while($row2 = mysqli_fetch_assoc($rs))
 		{
 			// this is only to get the department
-
-			$qq = "SELECT dep FROM department WHERE idlink = '".$row2['idlink']."'";
+            $idlink = $row2['idlink'];
+			$qq = "SELECT dep FROM department WHERE idlink = $idlink";
 			$rr = mysqli_query($dbc, $qq);
 			$r3 = mysqli_fetch_array($rr);
 			if(mysqli_num_rows($rr)==0){
 				$dep = $row2['department'];
-
 			}else{
 				$dep = $r3[0];
 			}
@@ -504,7 +464,7 @@ body{
 			echo '<td>' . $row2['firstname'] . '</td>';
 			echo '<td>' . $row2['employeenum'] . '</td>';
 			echo '<td>' . $row2['iso'] . '</td>';
-			echo '<td><a href = "department.php?c='.$row2['idlink'].'&id='.$dataid.'">' . $dep. '</a></td>';
+			echo '<td><a href = "department.php?c='.$row2['costcenter'].'&id='.$dataid.'">' . $dep. '</a></td>';
 			//echo '<td>' . $row2['costcenter'] . '</td>';
 			//echo '<td>' . $row2['empbld'] . '</td>';
 			//echo '<td>' . $row2['emprm'] . '</td>';
@@ -633,7 +593,7 @@ function assignKey(){
 
 	if($pages > 1) //Set up pages if necessary
 	{
-		$link = 'keydatabase.php?dataid=' . $dataid. '&p=' . $pages . '&lastname=' .$lastname . '&firstname=' .$firstname . '&employeenum=' .$employeenum . '&ssn=' .$ssn .'&iso=' . $iso . '&disposition=' . $disposition . '&dispositiondate=' . $dispositiondate . '&idlink=' . $idlink . '&empbld=' . $empbld . '&emprm=' . $emprm . '&tag=' . $tag . '&keyname=' . $keyname . '&series=' . $series . '&keybld=' . $keybld . '&keyrm=' . $keyrm . '&issuedate=' . $issuedate . '&department=' . $department . '&receiptdate=' . $receiptdate . '&status=' . $status;
+		$link = 'keydatabase.php?dataid=' . $dataid. '&p=' . $pages . '&lastname=' .$lastname . '&firstname=' .$firstname . '&employeenum=' .$employeenum . '&ssn=' .$ssn .'&iso=' . $iso . '&disposition=' . $disposition . '&dispositiondate=' . $dispositiondate . '&costcenter=' . $costcenter . '&empbld=' . $empbld . '&emprm=' . $emprm . '&tag=' . $tag . '&keyname=' . $keyname . '&series=' . $series . '&keybld=' . $keybld . '&keyrm=' . $keyrm . '&issuedate=' . $issuedate . '&department=' . $department . '&receiptdate=' . $receiptdate . '&status=' . $status;
 		echo paginate($pages, $start, $display, $link);
 	}
 	include ('includes/footer.html');

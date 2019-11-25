@@ -17,12 +17,6 @@
 			$id = $_GET['id'];
 			$q = "SELECT * FROM department WHERE dep = '".$_GET['c']."'";
 			$r = mysqli_query($dbc, $q);
-			$dep;
-			$empbld;
-			$emprm;
-			$name;
-			$email;
-			$phone;
 			while ($row = mysqli_fetch_assoc($r)){
 				$dep = $row['dep'];
 				$empbld = $row['empbld'];
@@ -33,6 +27,7 @@
 				$name2 = $row['name2'];
 				$phone2 = $row['phone2'];
 				$email2 = $row['email2'];
+                $idlink = $row['idlink'];
 
 				$chair = $row['chair'];
 				$dean = $row['dean'];
@@ -109,26 +104,29 @@
 			<td>Designee 2 Name</td>
 			<td><?php echo $name2?></td>
 		</tr>
-				<tr>
+        <tr>
 			<td>Designee 2 Phone #</td>
 			<td><?php echo $phone2?></td>
 		</tr>
-				<tr>
+		<tr>
 			<td>Designee 2 Email</td>
 			<td><?php echo $email2?></td>
 		</tr>
+		<tr>
 			<td >Chair / Director</td>
 			<td><?php echo $chair?></td>
 		</tr>
+		<tr>
 			<td >Dean / AVP</td>
 			<td><?php echo $dean?></td>
 		</tr>
+		<tr>
 			<td >VP / Provost</td>
 			<td><?php echo $provost?></td>
 		</tr>
 
 	</table>
-	<a  type = "button" href = "edit-department.php?<?php echo "c=".$costcenter."&d=".$dep."&b=".$empbld."&r=".$emprm."&n=".$name."&p=".$phone."&e=".$email."&n2=".$name2."&p2=".$phone2."&e2=".$email2."&ch=".$chair."&de=".$dean."&pr=".$provost;?>" class = "btn btn-info btn-lg">Edit</a>
+	<a  type = "button" href = "edit-department.php?<?php echo "c=".$idlink."&d=".$dep."&b=".$empbld."&r=".$emprm."&n=".$name."&p=".$phone."&e=".$email."&n2=".$name2."&p2=".$phone2."&e2=".$email2."&ch=".$chair."&de=".$dean."&pr=".$provost;?>" class = "btn btn-info btn-lg">Edit</a>
 	</div>
 
 </body>

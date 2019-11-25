@@ -4,40 +4,39 @@
 
 	// If no session value is present, redirect the user:
 	// Also validate the HTTP_USER_AGENT!
-	if (!isset($_SESSION['agent']) OR ($_SESSION['agent'] != md5($_SERVER['HTTP_USER_AGENT'])) OR ($_SESSION['admin_level'] < 1) )
+	/*if (!isset($_SESSION['agent']) OR ($_SESSION['agent'] != md5($_SERVER['HTTP_USER_AGENT'])) OR ($_SESSION['admin_level'] < 1) )
 	{
 		// Need the functions:
 		require ('includes/login_functions.inc.php');
 		redirect_user('index.php');
-	}
+	}*/
 	require("includes/mysqli_connect.php");
-	require ('includes/login_functions.inc.php');
+	/*require ('includes/login_functions.inc.php');*/
 	$page_title = 'Edit Department Profile';
 	include ('includes/header.html');
 
-			$name = $_GET['n'];
-			$dep = $_GET['d'];
-			$costcenter = $_GET['c'];
-			$bld = $_GET['b'];
-			$room = $_GET['r'];
-			$phone = $_GET['p'];
-			$email = $_GET['e'];
+    $name = $_GET['n'];
+    $dep = $_GET['d'];
+    $idlink = $_GET['c'];
+    $bld = $_GET['b'];
+    $room = $_GET['r'];
+    $phone = $_GET['p'];
+    $email = $_GET['e'];
 
-			$name2 = $_GET['n2'];
-			$phone2 = $_GET['p2'];
-			$email2 = $_GET['e2'];
+    $name2 = $_GET['n2'];
+    $phone2 = $_GET['p2'];
+    $email2 = $_GET['e2'];
 
-			$chair = $_GET['ch'];
-			$dean = $_GET['de'];
-			$provost = $_GET['pr'];
+    $chair = $_GET['ch'];
+    $dean = $_GET['de'];
+    $provost = $_GET['pr'];
 
 
 	if (isset($_POST['submit'])){
-			$name = $_POST['name'];
 			$dep = $_POST['dep'];
-			$costcenter = $_POST['costcenter'];
 			$bld = $_POST['empbld'];
 			$room = $_POST['emprm'];
+            $name = $_POST['name'];
 			$phone = $_POST['phone'];
 			$email = $_POST['email'];
 
@@ -49,14 +48,17 @@
 			$dean = $_POST['dean'];
 			$provost = $_POST['provost'];
 
-			$previouscostcenter = $_GET['c'];
-			$sql = "UPDATE department SET name = '$name', dep = '$dep', empbld = '$bld', phone = '$phone', emprm = '$room', email = '$email', costcenter = '$costcenter', name2 = '$name2', phone2 = '$phone2', email2 = '$email2', chair = '$chair', dean = '$dean', provost = '$provost' WHERE costcenter = '$previouscostcenter'";
+			$sql = "UPDATE department SET name = '$name', dep = '$dep', empbld = '$bld', phone = '$phone', emprm = '$room', email = '$email', name2 = '$name2', phone2 = '$phone2', email2 = '$email2', chair = '$chair', dean = '$dean', provost = '$provost' WHERE idlink = ".$idlink;
 			$res = mysqli_query($dbc, $sql);
-
-			echo '<h1 style = "color:green">RECORD UPDATED</h1>';
+        
+            if (!res){
+                die("QUERY FAIL!!" . mysqli_error($dbc));
+            } else{
+			     echo '<h1 style = "color:green">RECORD UPDATED!!!</h1>';
+            } 
 			//echo $sql;
 	}
-			echo '<a href = "department.php?c='.$costcenter.'" type = "button" class = "btn btn-secondary btn-lg" style = "margin-left:25%">Back</a>';
+			echo "<a href = 'department.php?c=".$dep."' type = 'button' class = 'btn btn-secondary btn-lg' style = 'margin-left:25%'>Back</a>";
 
 	?>
 <!DOCTYPE html>
@@ -81,10 +83,6 @@
 		<tr>
 			<td class="col-xs-4">Dept. Name</td>
 			<td> <input type = "text" name = "dep" value = "<?php echo $dep;?>"> </td>
-		</tr>
-		<tr>
-			<td >Cost Center</td>
-			<td> <input type = "text" name = "costcenter" value = "<?php echo $costcenter;?>"> </td>
 		</tr>
 		<tr>
 			<td >Building</td>

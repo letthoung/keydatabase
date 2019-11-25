@@ -47,21 +47,21 @@ if (isset($_POST['transfer'])){
 
   // escape special characters in names.
   $rlastname = addslashes($rlastname);
-	$rfirstname = addslashes($rfirstname);
+  $rfirstname = addslashes($rfirstname);
   $olastname = addslashes($olastname);
   $ofirstname = addslashes($ofirstname);
 
-  $rs0 = mysqli_query($dbc, "SELECT costcenter From department where dep ='$dep'");
+  $rs0 = mysqli_query($dbc, "SELECT idlink From department where dep ='$dep'");
 
   $row = mysqli_fetch_array($rs0);
-  $costcenter = $row['costcenter'];
+  $idlink = $row['idlink'];
   $issuedate = date('Y-m-d');
   if ($series ==  'No Series' || $series == 'Select Series'){
     $series = '';
   }
 
-  $SQL = "INSERT INTO key_database (lastname, firstname, employeenum, disposition, dispositiondate, costcenter, tag,keyname,series,keybld,keyrm,issuedate,department,status)";
-  $SQL .= "VALUES('$rlastname', '$rfirstname', '$empnum','$disposition','$dispositiondate','$costcenter','$tag','$key', '$series', '$bld', '$keyrm', '$issuedate','$dep','$group') ";
+  $SQL = "INSERT INTO key_database (lastname, firstname, employeenum, disposition, dispositiondate, idlink, tag,keyname,series,keybld,keyrm,issuedate,department,status)";
+  $SQL .= "VALUES('$rlastname', '$rfirstname', '$empnum','$disposition','$dispositiondate', $idlink,'$tag','$key', '$series', '$bld', '$keyrm', '$issuedate','$dep','$group') ";
 
 
   $SQL2 = "UPDATE key_database SET disposition = 'Returned', dispositiondate = '$dispositiondate' WHERE lastname ='$olastname'AND firstname= '$ofirstname'AND keyname = '$key' AND series = '$series'";

@@ -15,7 +15,7 @@
 	$page_title = 'Department Profile';
 	include ('includes/header.html');
 			$id = $_GET['id'];
-			$q = "SELECT * FROM department WHERE costcenter = '".$_GET['c']."'";
+			$q = "SELECT * FROM department WHERE dep = '".$_GET['c']."'";
 			$r = mysqli_query($dbc, $q);
 			$dep;
 			$empbld;
@@ -39,7 +39,7 @@
 				$provost = $row['provost'];
 			}
 
-			$costcenter = $_GET['c'];
+			$dep = $_GET['c'];
 
 	?>
 <!DOCTYPE html>
@@ -64,10 +64,10 @@
 			<td class="col-xs-4">Dept. Name</td>
 			<td><?php echo $dep?></td>
 		</tr>
-		<tr>
+		<!--<tr>
 			<td >Cost Center</td>
-			<td> <?php echo $_GET['c']?></td>
-		</tr>
+			<td> <?php /*echo $_GET['c']*/?></td>
+		</tr>-->
 		<tr>
 			<td >Building</td>
 			<td><?php echo $empbld?></td>

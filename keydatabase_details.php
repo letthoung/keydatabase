@@ -3,7 +3,7 @@
 
 	// If no session value is present, redirect the user:
 	// Also validate the HTTP_USER_AGENT!
-	if (!isset($_SESSION['agent']) OR ($_SESSION['agent'] != md5($_SERVER['HTTP_USER_AGENT'])))
+	/*if (!isset($_SESSION['agent']) OR ($_SESSION['agent'] != md5($_SERVER['HTTP_USER_AGENT'])))
 	{
 		require ('includes/login_functions.inc.php');
 		redirect_user('index.php');
@@ -12,7 +12,7 @@
 	{
 		require ('includes/login_functions.inc.php');
 		redirect_user('light_assets.php');
-	}
+	}*/
 	require ('includes/mysqli_connect.php');
 
 	$id = $_GET['id'];
@@ -80,10 +80,6 @@
 		<tr>
 			<th>Disposition Date</th>
 			<td><?php echo $row['dispositiondate']; ?></td>
-		</tr>
-		<tr>
-			<th>Cost Center</th>
-			<td><?php echo $row['costcenter']; ?></td>
 		</tr>
 		<!--<tr>
 			<th>Employee Building</th>

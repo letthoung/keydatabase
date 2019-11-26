@@ -59,8 +59,8 @@ foreach ($id as $val){
 	$result = @mysqli_query($dbc, $query);
 
 	while($row = $result->fetch_assoc()) {
-		$cc= $row["costcenter"];
-		$sql = "SELECT * FROM department WHERE costcenter = '$cc'";
+		$idlink= $row["idlink"];
+		$sql = "SELECT * FROM department WHERE idlink = $idlink";
 		$res = mysqli_query($dbc, $sql);
 		$row2 = mysqli_fetch_assoc($res);
 
@@ -86,7 +86,7 @@ foreach ($id as $val){
 		$pdf-> SetXY($x,$y+25);
 		$pdf->Multicell(120,5,"Department: " . $row['department']."\n ",'L','L',0);
 		$pdf-> SetXY($x+120,$y+25);
-		$pdf->Multicell(70,5,"Cost Center: ".$row["costcenter"]."\n ",'R','L',0);
+		$pdf->Multicell(70,5,"\n ",'R','L',0);
 
 		$pdf-> SetXY($x,$y+35);
 		$pdf->Multicell(120,5,"Dept. Building: " . $row2["empbld"]."\n ",'L, B','L',0);
@@ -243,7 +243,6 @@ foreach ($id as $val){
 		$pdf->Ln(10);
 		$pdf->Cell(50,5,"Employee #: " . $row["employeenum"],0,0,'L',0);
 		$pdf->Cell(70,5,$row['department'],0,0,'L',0);
-		$pdf->Cell(40,5,"Cost Center: ".$row["costcenter"],0,0,'L',0);
 
 		$pdf->Ln(10);
 		$pdf->Cell(50,5,"Dept. Building: " . $row["empbld"],0,0,'L',0);
@@ -310,7 +309,7 @@ foreach ($id as $val){
   while($row = $result->fetch_assoc()) {
     $pdf->SetFont('Arial','',10);
 		$line1 = "\n\n"."" . $row["lastname"]. " , ".$row['firstname']."                             Tag # ". $row["tag"]."\n\n";
-		$line2= "Employee #: " . $row["employeenum"]. "              ".$row['department']."          Cost Center: ". $row["costcenter"]."\n\n";
+		$line2= "Employee #: " . $row["employeenum"]. "              ".$row['department']."\n\n";
 
 		//Employee Info
 		if ($counter == 0){
@@ -453,7 +452,7 @@ else
 	$objPHPExcel->getActiveSheet()->setCellValue('D'.$r,$row["employeenum"]);
 	$objPHPExcel->getActiveSheet()->setCellValue('E'.$r,$row["iso"]);
 	$objPHPExcel->getActiveSheet()->setCellValue('F'.$r,$row['department']);
-	$objPHPExcel->getActiveSheet()->setCellValue('G'.$r,$row["costcenter"]);
+	/*$objPHPExcel->getActiveSheet()->setCellValue('G'.$r,$row["costcenter"]);*/
 	$objPHPExcel->getActiveSheet()->setCellValue('H'.$r,$row["empbld"]);
 	$objPHPExcel->getActiveSheet()->setCellValue('I'.$r,$row["emprm"]);
 	$objPHPExcel->getActiveSheet()->setCellValue('J'.$r,$row["tag"]);

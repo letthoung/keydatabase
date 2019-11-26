@@ -47,7 +47,7 @@ foreach ($id as $val){
 
 	while($row = $result->fetch_assoc()) {
 		$idlink= $row["idlink"];
-		$sql = "SELECT * FROM department WHERE idlink = '$idlink'";
+		$sql = "SELECT * FROM department WHERE idlink = $idlink";
 		$res = mysqli_query($dbc, $sql);
 		$row2 = mysqli_fetch_assoc($res);
 

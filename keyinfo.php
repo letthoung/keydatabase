@@ -101,7 +101,7 @@ if(isset($_GET['name'])){
 			 $jsonArr["group"] = $row['status'];
 			 $idlink = $row["idlink"];
 			 //echo "SELECT dep FROM department WHERE costcenter = '$cc'";
-			 $r2 = mysqli_query($dbc, "SELECT dep FROM department WHERE idlink = '$idlink'");
+			 $r2 = mysqli_query($dbc, "SELECT dep FROM department WHERE idlink = $idlink");
 			 $row2 = mysqli_fetch_array($r2);
 			 $jsonArr["department"] = $row2['dep'];
 

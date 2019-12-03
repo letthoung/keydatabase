@@ -5,9 +5,9 @@
 	$db = "ezdslim30004";
 	
 	//Create connection 
-	$dbc = @mysqli_connect($servername,$user, $pass, $db);
-	if(mysqli_connect_errno())
+	$dbc = mysqli_connect($servername,$user, $pass, $db);
+	if(!$dbc)
 	{
-		$errors[] = "Database connection unsuccessful.";
+		die("CONNECT FAILED! " . mysqli_error($dbc));
 	}
 ?>

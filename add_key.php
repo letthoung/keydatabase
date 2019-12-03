@@ -1,14 +1,14 @@
 <?php
 	session_start(); // Start the session.
-/*
+
 	require ('includes/login_functions.inc.php');
-*/
+
 	// If no session value is present, redirect the user:
 	// Also validate the HTTP_USER_AGENT!
-	/*if (!isset($_SESSION['agent']) OR ($_SESSION['agent'] != md5($_SERVER['HTTP_USER_AGENT'])) )
+	if (!isset($_SESSION['agent']) OR ($_SESSION['agent'] != md5($_SERVER['HTTP_USER_AGENT'])) )
 	{
 		redirect_user('index.php');
-	}*/
+	}
 	//This page will be used to edit exterior light records. If the user is of a sufficient admin level it makes the changes to the exterior_lights table.
 	//If they are not it submits the edits to be made so that an admin can look at them and either accept or deny them.
 
@@ -79,13 +79,13 @@
 		{
 			$dispositiondate = NULL;
 		}
-		if(!empty($_POST['costcenter']))
+		if(!empty($_POST['department']))
 		{
-			$costcenter = $_POST['costcenter'];
+			$idlink = $_POST['department'];
 		}
 		else
 		{
-			$costcenter = NULL;
+			$idlink = NULL;
 		}
 		if(!empty($_POST['empbld']))
 		{
@@ -159,19 +159,6 @@
 		{
 			$issuedate = NULL;
 		}
-			if(!empty($_POST['department']))
-		{
-			$department = $_POST['department'];
-            $query = "SELECT idlink FROM department WHERE dep = '$department'";
-            $idlink_query = mysqli_query($dbc, $query);
-            $row = mysqli_fetch_assoc($idlink_query);
-            $idlink = $row['idlink'];
-		}
-		else
-		{
-			$department = NULL;
-            $idlink = 0;
-		}
 			if(!empty($_POST['receiptdate']))
 		{
 			$receiptdate = $_POST['receiptdate'];
@@ -196,20 +183,17 @@
 			/*if($_SESSION['admin_level'] >= 2)//These users have authority to directly make changes to records.
 			{*/
 				//Prepare a statement to send to the database with all new values.
-				$query = "INSERT INTO key_database ( lastname, firstname, employeenum, iso, disposition, dispositiondate, costcenter, empbld, emprm, tag, keyname, series, keybld, keyrm, issuedate, department, receiptdate, status, idlink)";
-				$query.=" VALUES ('".mysqli_real_escape_string($dbc,$lastname)."', '".mysqli_real_escape_string($dbc,$firstname)."', '$employeenum', '$iso', '$disposition', '$dispositiondate', '$costcenter', '$empbld', '$emprm', '$tag', '$keyname', '$series', '$keybld', '$keyrm', '$issuedate', '".mysqli_real_escape_string($dbc,$department)."', '$receiptdate', '".mysqli_real_escape_string($dbc,$status)."', '$idlink')";
-				$result = @mysqli_query($dbc, $query);
+				$query = "INSERT INTO key_database ( lastname, firstname, employeenum, iso, disposition, dispositiondate, empbld, emprm, tag, keyname, series, keybld, keyrm, issuedate, receiptdate, status, idlink)";
+				$query.=" VALUES ('".mysqli_real_escape_string($dbc,$lastname)."', '".mysqli_real_escape_string($dbc,$firstname)."', '$employeenum', '$iso', '$disposition', '$dispositiondate', '$empbld', '$emprm', '$tag', '$keyname', '$series', '$keybld', '$keyrm', '$issuedate', '$receiptdate', '".mysqli_real_escape_string($dbc,$status)."', {$idlink})";
+				$result = mysqli_query($dbc, $query);
 				if(!$result) {
-				die('Query FAILED <br>'. mysqli_error($dbc). '    id '. "$idlink". '   dep ' . "$department");
-
+				    die('Query FAILED! ' . mysqli_error($dbc));
 				} else {
-
-				echo 'Key Added';
-				$userfirstname = $_SESSION['first_name'];
-				$userlastname = $_SESSION['last_name'];
-				$action = 'ADDED new key record for key: '.$keyname;
-				recordTimestamp($userfirstname , $userlastname ,$action );
-
+                    echo 'Key Added';
+                    $userfirstname = $_SESSION['first_name'];
+                    $userlastname = $_SESSION['last_name'];
+                    $action = 'ADDED new key record for key: '.$keyname;
+                    recordTimestamp($userfirstname , $userlastname ,$action );
 				}
 /*
 			}*/
@@ -302,14 +286,12 @@
 				<select name = "department" id = "department" onchange = "autoFill(this[selectedIndex].text)">
 				<option></option>
 				<?php
-				$q = "SELECT dep FROM department ORDER BY dep";
+				$q = "SELECT * FROM department ORDER BY dep";
 				$rs = @mysqli_query($dbc, $q);
 
 				while($row = mysqli_fetch_array($rs))
 				{
-					echo '<option value = "' . $row['dep'] . '" ';
-
-					echo '>' . $row['dep'] . '</option>';
+					echo '<option value = "' . $row['idlink'] . '" >' . $row['dep'] . '</option>';
 				}
 				mysqli_free_result($rs);
 			?>

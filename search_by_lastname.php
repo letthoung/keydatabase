@@ -4,14 +4,14 @@
 
 	// If no session value is present, redirect the user:
 	// Also validate the HTTP_USER_AGENT!
-	/*if (!isset($_SESSION['agent']) OR ($_SESSION['agent'] != md5($_SERVER['HTTP_USER_AGENT'])) OR ($_SESSION['admin_level'] < 1) )
+	if (!isset($_SESSION['agent']) OR ($_SESSION['agent'] != md5($_SERVER['HTTP_USER_AGENT'])) OR ($_SESSION['admin_level'] < 1) )
 	{
 		// Need the functions:
 		require ('includes/login_functions.inc.php');
 		redirect_user('index.php');
-	}*/
+	}
 	require("includes/mysqli_connect.php");
-	//require ('includes/login_functions.inc.php');
+	require ('includes/login_functions.inc.php');
 	$page_title = 'Search Results';
 	include ('includes/header.html');
 
@@ -53,7 +53,7 @@ table, tr, td, th{
 <h1>Search Results</h1>
 <br>
 <div class = "container">
-<form action="pdf_key_reciept_transfer_returnreport.php" method="post" >
+    <form action="pdf_key_reciept_transfer_returnreport.php" method="post"></form>
 </div>
 <?php
 if (isset($_POST['search-box']) || isset($_GET['tagfromlink'])){
@@ -62,11 +62,6 @@ if (isset($_POST['search-box']) || isset($_GET['tagfromlink'])){
 	$bld = $_POST['keybld'];
 	$dep = $_POST['department'];
 	$disp = $_POST['disposition'];
-
-	$tag;
-	$key;
-	$dep;
-	$sql;
 	$sql = "SELECT * FROM key_database";
 
 //enables searching from link under tags
@@ -94,7 +89,7 @@ if (isset($_POST['search-box']) || isset($_GET['tagfromlink'])){
 			$sql.=" AND keybld ='".$bld."'";
 		}
 		if ($dep != 'all'){
-			$sql.=" AND costcenter = '".$dep."'";
+			$sql.=" AND idlink = '".$dep."'";
 		}
 		if ($disp != 'all'){
 			$sql.=" AND disposition = '".$disp."'";
@@ -103,10 +98,10 @@ if (isset($_POST['search-box']) || isset($_GET['tagfromlink'])){
 		if($name ==""){
 				$sql = "SELECT * FROM key_database ";
 				if ($bld !='all'){
-					$sql.=" WHERE keybld LIKe '%".$bld."%' ";
+					$sql.=" WHERE keybld LIKE '%".$bld."%' ";
 
 					if ($dep != 'all'){
-						$sql.=" AND costcenter = '".$dep."'";
+						$sql.=" AND idlink = '".$dep."'";
 
 					}
 
@@ -116,9 +111,9 @@ if (isset($_POST['search-box']) || isset($_GET['tagfromlink'])){
 					}
 
 				}else if($dep != 'all'){
-						$sql.=" WHERE costcenter = '".$dep."'";
+						$sql.=" WHERE idlink = '".$dep."'";
 						if ($bld !='all'){
-							$sql.=" AND keybld LIKe '%".$bld."%' ";
+							$sql.=" AND keybld LIKE '%".$bld."%' ";
 						}
 						if($disp != 'all'){
 							$sql.=" AND disposition = '".$disp."'";
@@ -128,11 +123,11 @@ if (isset($_POST['search-box']) || isset($_GET['tagfromlink'])){
 				else if ($disp != 'all'){
 					$sql.=" WHERE disposition = '".$disp."'";
 					if ($dep != 'all'){
-						$sql.=" AND costcenter = '".$dep."'";
+						$sql.=" AND idlink = '".$dep."'";
 
 					}
 					if ($bld !='all'){
-						$sql.=" AND keybld LIKe '%".$bld."%' ";
+						$sql.=" AND keybld LIKE '%".$bld."%' ";
 					}
 
 				}
@@ -209,11 +204,11 @@ else{
 			<input type = "submit" id ="submit-checked-excel" name = "submit-checked-excel" class = "hidden"/>
 			<?php echo '</td>';
 
-						// this is only to get the department
-
-			$qq = "SELECT costcenter FROM department WHERE dep = '".$row['department']."'";
+            // this is only to get the department
+			$qq = "SELECT dep FROM department WHERE idlink = '".$row['idlink']."'";
 			$rr = mysqli_query($dbc, $qq);
 			$r3 = mysqli_fetch_array($rr);
+            $dep = $r3['dep'];
 
 			/////////////////////////////////////
 
@@ -223,8 +218,8 @@ else{
 			echo '<td>' . $row['employeenum'] . '</td>';
 			echo '<td>' . $row['iso'] . '</td>';
 			//echo '<td><a href = "department.php?c='.$r3[0].'">' . $row['department']. '<a></td>';
-	//echo '<td><a href = "department.php?c='.$r3[0].'">' . $r3[0]. '<a></td>';
-	echo '<td><a href = "department.php?c='.$row['costcenter'].'">' .$row['department']. '<a></td>';
+	       //echo '<td><a href = "department.php?c='.$r3[0].'">' . $r3[0]. '<a></td>';
+	       echo '<td><a href = "department.php?c='. $row['idlink'] .'">'. $dep . '</a></td>';
 
 			echo '<td><a href = "search_by_lastname.php?tagfromlink='.$row['tag'].'" >' . $row['tag'] . '</a></td>';
 			echo '<td><a href = "search_by_key.php?keyNum=' . $row['keyname'] . '" target = "_blank">' . $row['keyname'] . '</a></td>';

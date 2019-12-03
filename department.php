@@ -4,37 +4,36 @@
 
 	// If no session value is present, redirect the user:
 	// Also validate the HTTP_USER_AGENT!
-	/*if (!isset($_SESSION['agent']) OR ($_SESSION['agent'] != md5($_SERVER['HTTP_USER_AGENT'])) OR ($_SESSION['admin_level'] < 1) )
+	if (!isset($_SESSION['agent']) OR ($_SESSION['agent'] != md5($_SERVER['HTTP_USER_AGENT'])) OR ($_SESSION['admin_level'] < 1) )
 	{
 		// Need the functions:
 		require ('includes/login_functions.inc.php');
 		redirect_user('index.php');
-	}*/
+	}
 	require("includes/mysqli_connect.php");
-	/*require ('includes/login_functions.inc.php');*/
+	require ('includes/login_functions.inc.php');
 	$page_title = 'Department Profile';
 	include ('includes/header.html');
-			$id = $_GET['id'];
-			$q = "SELECT * FROM department WHERE dep = '".$_GET['c']."'";
-			$r = mysqli_query($dbc, $q);
-			while ($row = mysqli_fetch_assoc($r)){
-				$dep = $row['dep'];
-				$empbld = $row['empbld'];
-				$emprm = $row['emprm'];
-				$name = $row['name'];
-				$phone = $row['phone'];
-				$email = $row['email'];
-				$name2 = $row['name2'];
-				$phone2 = $row['phone2'];
-				$email2 = $row['email2'];
-                $idlink = $row['idlink'];
+    $id = $_GET['id'];
+    $q = "SELECT * FROM department WHERE idlink = '".$_GET['c']."'";
+    $r = mysqli_query($dbc, $q);
+    $row = mysqli_fetch_assoc($r);
+    
+    $dep = $row['dep'];
+    $empbld = $row['empbld'];
+    $emprm = $row['emprm'];
+    $name = $row['name'];
+    $phone = $row['phone'];
+    $email = $row['email'];
+    $name2 = $row['name2'];
+    $phone2 = $row['phone2'];
+    $email2 = $row['email2'];
+    $idlink = $row['idlink'];
 
-				$chair = $row['chair'];
-				$dean = $row['dean'];
-				$provost = $row['provost'];
-			}
-
-			$dep = $_GET['c'];
+    $chair = $row['chair'];
+    $dean = $row['dean'];
+    $provost = $row['provost'];
+    
 
 	?>
 <!DOCTYPE html>

@@ -1,6 +1,6 @@
 <?php
 	session_start(); // Start the session.
-    require ('includes/login_functions.inc.php');
+    erequire ('includes/login_functions.inc.php');
 	// If no session value is present, redirect the user:
 	// Also validate the HTTP_USER_AGENT!
 	if (!isset($_SESSION['agent']) OR ($_SESSION['agent'] != md5($_SERVER['HTTP_USER_AGENT'])) )
@@ -193,14 +193,14 @@
         }
         $row = mysqli_fetch_assoc($query_result);
         $idlink = $row['idlink'];
-
+            
 		//If no errors were detected during validation
 		if(empty($errors))
 		{
 			if($_SESSION['admin_level'] > 2)//These users have authority to directly make changes to records.
 			{
 				//Prepare a statement to send to the database with all new values.
-                $stmt = mysqli_prepare($dbc, "UPDATE key_database SET idlink=?, lastname=?, firstname=?, employeenum=?, iso=?, disposition=?, dispositiondate=?, empbld=?, emprm=?, tag=?, keyname=?, series=?, keybld=?, keyrm=?, issuedate=?, department=?, receiptdate=?, status=? WHERE dataid = $id");
+				$stmt = mysqli_prepare($dbc, "UPDATE key_database SET idlink=?, lastname=?, firstname=?, employeenum=?, iso=?, disposition=?, dispositiondate=?, empbld=?, emprm=?, tag=?, keyname=?, series=?, keybld=?, keyrm=?, issuedate=?, department=?, receiptdate=?, status=? WHERE dataid = $id");
 				mysqli_stmt_bind_param($stmt, "isssssssssssssssds", $idlink, $lastname, $firstname, $employeenum, $iso, $disposition, $dispositiondate, $empbld, $emprm, $tag, $keyname, $series, $keybld, $keyrm, $issuedate, $department, $receiptdate, $status);
 				mysqli_stmt_execute($stmt);
 				if(mysqli_stmt_error($stmt) != '')
@@ -221,14 +221,14 @@
 				
 			}elseif(($_SESSION['admin_level'] < 3) && $disposition =='Processing')
 			{
-                $stmt = mysqli_prepare($dbc, "UPDATE key_database SET idlink=?, lastname=?, firstname=?, employeenum=?, iso=?, dispositiondate=?, empbld=?, emprm=?, tag=?, keyname=?, series=?, keybld=?, keyrm=?, issuedate=?, department=?, receiptdate=?, status=? WHERE dataid = $id");
+					$stmt = mysqli_prepare($dbc, "UPDATE key_database SET idlink=?, lastname=?, firstname=?, employeenum=?, iso=?, dispositiondate=?, empbld=?, emprm=?, tag=?, keyname=?, series=?, keybld=?, keyrm=?, issuedate=?, department=?, receiptdate=?, status=? WHERE dataid = $id");
 				mysqli_stmt_bind_param($stmt, "issssssssssssssds", $idlink, $lastname, $firstname, $employeenum, $iso, $dispositiondate, $empbld, $emprm, $tag, $keyname, $series, $keybld, $keyrm, $issuedate, $department, $receiptdate, $status);
 				mysqli_stmt_execute($stmt);
-				
-                if(mysqli_stmt_error($stmt) != '')
+				if(mysqli_stmt_error($stmt) != '')
 				{
 					$errors[] = mysqli_stmt_error($stmt);
 				}
+
 				/*if(empty($errors))
 				{
 					require ('includes/login_functions.inc.php');

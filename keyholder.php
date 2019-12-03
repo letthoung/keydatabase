@@ -170,7 +170,7 @@
 			<td>
 			<?php
 
-			$sql1= "SELECT keyname FROM key_database WHERE firstname = '".$fname."' AND lastname = '".$lname."' AND disposition = 'Assigned'";
+			$sql1= "SELECT keyname FROM key_database WHERE firstname = '".$fname."' AND lastname = '".$lname."' AND ( disposition = 'Assigned' OR disposition = 'No Receipt')";
 			$r1 = mysqli_query($dbc, $sql1);
 
 			while($row1 = mysqli_fetch_array($r1)){

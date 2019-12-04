@@ -157,7 +157,7 @@
 		}
 			if(!empty($_POST['department']))
 		{
-			$department = $_POST['department'];
+			$idlink = $_POST['department'];
 
 		}
 		else if(!empty($_POST['department-text']))
@@ -184,15 +184,6 @@
 		{
 			$status = NULL;
 		}
-        
-        /*Get idlink for insertion*/
-        $query = "SELECT * FROM key_database WHERE dep = '$department'";
-        $query_result = mysqli_query($dbc, $query);
-        if (!$query_result){
-            die("GET idlink FAILED! " . mysqli_error($dbc));
-        }
-        $row = mysqli_fetch_assoc($query_result);
-        $idlink = $row['idlink'];
 
 		//If no errors were detected during validation
 		if(empty($errors))
@@ -200,8 +191,8 @@
 			if($_SESSION['admin_level'] > 2)//These users have authority to directly make changes to records.
 			{
 				//Prepare a statement to send to the database with all new values.
-                $stmt = mysqli_prepare($dbc, "UPDATE key_database SET idlink=?, lastname=?, firstname=?, employeenum=?, iso=?, disposition=?, dispositiondate=?, empbld=?, emprm=?, tag=?, keyname=?, series=?, keybld=?, keyrm=?, issuedate=?, department=?, receiptdate=?, status=? WHERE dataid = $id");
-				mysqli_stmt_bind_param($stmt, "isssssssssssssssds", $idlink, $lastname, $firstname, $employeenum, $iso, $disposition, $dispositiondate, $empbld, $emprm, $tag, $keyname, $series, $keybld, $keyrm, $issuedate, $department, $receiptdate, $status);
+                $stmt = mysqli_prepare($dbc, "UPDATE key_database SET idlink=?, lastname=?, firstname=?, employeenum=?, iso=?, disposition=?, dispositiondate=?, empbld=?, emprm=?, tag=?, keyname=?, series=?, keybld=?, keyrm=?, issuedate=?, receiptdate=?, status=? WHERE dataid = $id");
+				mysqli_stmt_bind_param($stmt, "issssssssssssssds", $idlink, $lastname, $firstname, $employeenum, $iso, $disposition, $dispositiondate, $empbld, $emprm, $tag, $keyname, $series, $keybld, $keyrm, $issuedate, $receiptdate, $status);
 				mysqli_stmt_execute($stmt);
 				if(mysqli_stmt_error($stmt) != '')
 				{
@@ -221,8 +212,8 @@
 				
 			}elseif(($_SESSION['admin_level'] < 3) && $disposition =='Processing')
 			{
-                $stmt = mysqli_prepare($dbc, "UPDATE key_database SET idlink=?, lastname=?, firstname=?, employeenum=?, iso=?, dispositiondate=?, empbld=?, emprm=?, tag=?, keyname=?, series=?, keybld=?, keyrm=?, issuedate=?, department=?, receiptdate=?, status=? WHERE dataid = $id");
-				mysqli_stmt_bind_param($stmt, "issssssssssssssds", $idlink, $lastname, $firstname, $employeenum, $iso, $dispositiondate, $empbld, $emprm, $tag, $keyname, $series, $keybld, $keyrm, $issuedate, $department, $receiptdate, $status);
+                $stmt = mysqli_prepare($dbc, "UPDATE key_database SET idlink=?, lastname=?, firstname=?, employeenum=?, iso=?, dispositiondate=?, empbld=?, emprm=?, tag=?, keyname=?, series=?, keybld=?, keyrm=?, issuedate=?, receiptdate=?, status=? WHERE dataid = $id");
+				mysqli_stmt_bind_param($stmt, "isssssssssssssds", $idlink, $lastname, $firstname, $employeenum, $iso, $dispositiondate, $empbld, $emprm, $tag, $keyname, $series, $keybld, $keyrm, $issuedate, $receiptdate, $status);
 				mysqli_stmt_execute($stmt);
 				
                 if(mysqli_stmt_error($stmt) != '')
@@ -242,8 +233,8 @@
 				/*$stmt = mysqli_prepare($dbc, "INSERT INTO key_edit_requests (key_to_change, requesting_user, lastname, firstname, employeenum, iso, disposition, dispositiondate, costcenter, empbld, emprm, tag, keyname, series, keybld, keyrm, issuedate, department, receiptdate, status) VALUES ('$id','$user_num',?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
 				mysqli_stmt_bind_param($stmt, "ssssssssssssssisdi", $lastname, $firstname, $employeenum, $iso, $disposition, $dispositiondate, $costcenter, $empbld, $emprm, $tag, $keyname, $series, $keybld, $keyrm, $issuedate, $department, $receiptdate, $status);
 				mysqli_stmt_execute($stmt);*/
-				$sql = "INSERT INTO key_edit_requests (key_to_change, requesting_user, lastname, firstname, employeenum, idlink, iso, disposition, dispositiondate, empbld, emprm, tag, keyname, series, keybld, keyrm, issuedate, department, receiptdate, status)";
-				$sql .= " values ($id,'$user_num','$lastname', '$firstname', '$employeenum', $idlink, '$iso', '$disposition', '$dispositiondate', '$empbld', '$emprm', '$tag', '$keyname', '$series', '$keybld', '$keyrm', '$issuedate', '$department', '$receiptdate', '$status')";
+				$sql = "INSERT INTO key_edit_requests (key_to_change, requesting_user, lastname, firstname, employeenum, idlink, iso, disposition, dispositiondate, empbld, emprm, tag, keyname, series, keybld, keyrm, issuedate, receiptdate, status)";
+				$sql .= " values ($id,'$user_num','$lastname', '$firstname', '$employeenum', $idlink, '$iso', '$disposition', '$dispositiondate', '$empbld', '$emprm', '$tag', '$keyname', '$series', '$keybld', '$keyrm', '$issuedate', '$receiptdate', '$status')";
 				
 				
 				$rs = mysqli_query($dbc, $sql);
@@ -383,15 +374,15 @@
 				$res = mysqli_query($dbc, $s);
 				while ($rr = mysqli_fetch_assoc($res)){
 					echo "<option value = '".$rr['bld_name']."' ";
-						if($keybld == $rr['bld_name'] || $row['keybld']== $rr['bld_name']){
+						if($row['keybld']== $rr['bld_name']){
 							echo 'selected';
 						}
 					echo ">".$rr['bld_name']."</option>";
 				}
 				?>
 				</select>
-				<input type = "text" id = "keybld" name = "keybld-text" value = "<?php echo (empty($keybld))? $row['keybld']:$keybld; ?>" style = "display: none">
-				<a class = "btn btn-danger" id = "xbtn1" href ="#" onClick = "textToDrop('keybld','bld','xbtn1')" style = "display: none">X</a>
+				<!--<input type = "text" id = "keybld" name = "keybld-text" value = "<?php /*echo (empty($keybld))? $row['keybld']:$keybld;*/ ?>" style = "display: none">
+				<a class = "btn btn-danger" id = "xbtn1" href ="#" onClick = "textToDrop('keybld','bld','xbtn1')" style = "display: none">X</a>-->
 				</td>
 			</tr>
 			<tr>
@@ -415,13 +406,13 @@
 					<select name = "department" id = "department" onchange = "autoFill(this[selectedIndex].text)">
 					<option value = ""><option>
 					<?php
-					$q = "SELECT dep FROM department";
+					$q = "SELECT * FROM department";
 					$rs = @mysqli_query($dbc, $q);
 					while($ro = mysqli_fetch_array($rs))
 					{
-
-						echo '<option value = "' . $ro['dep'] . '" ';
-							if($department == $ro['dep'] || $row['department'] == $ro['dep'] ){
+                        // Look HERE!!
+						echo '<option value = "' . $ro['idlink'] . '" ';
+							if($row['idlink'] == $ro['idlink'] ){
 								echo 'selected';
 							}
 						echo '>' . $ro['dep'] . '</option>';
@@ -429,8 +420,8 @@
 				//mysqli_free_result($rs);
 			?>
 				</select>
-				<input type = "text" id = "department-text" name = "department-text" value = "<?php echo (empty($department))? $row['department']:$department; ?>" onChange="textToDrop(this)" style = "display: none">
-				<a class = "btn btn-danger" id = "xbtn" href ="#" onClick = "textToDrop('department-text','department','xbtn')" style = "display: none">X</a>
+				<!--<input type = "text" id = "department-text" name = "department-text" value = "<?php /*echo (empty($department))? $row['department']:$department;*/ ?>" onChange="textToDrop(this)" style = "display: none">
+				<a class = "btn btn-danger" id = "xbtn" href ="#" onClick = "textToDrop('department-text','department','xbtn')" style = "display: none">X</a>-->
 				</td>
 			</tr>
 			<!-- <tr>

@@ -16,7 +16,7 @@ require('includes/PHPExcel-1.8/Classes/PHPExcel.php');
 <?php
 
     $idlink = $_GET['c'];
-    $sql    = "SELECT * FROM key_database WHERE idlink = $idlink AND (disposition = 'Assigned' OR disposition = 'No Receipt')";
+    $sql    = "SELECT * FROM key_database WHERE idlink = $idlink AND (disposition = 'Assigned' OR disposition = 'No Receipt' OR disposition = 'Processing') ORDER BY disposition, issuedate DESC";
     $result = mysqli_query($dbc, $sql);
     if (!$result){
         die("QUERY FAILED! " . mysqli_error($dbc));
@@ -78,7 +78,7 @@ require('includes/PHPExcel-1.8/Classes/PHPExcel.php');
     $r=2;
     $filename='';
      while ($row = mysqli_fetch_assoc($result)) {
-        $filename = $department .".xlsx";
+        $filename = $department . ".xlsx";
         $objPHPExcel->getActiveSheet()->setCellValue('A' . $r, $row["status"]);
         $objPHPExcel->getActiveSheet()->setCellValue('B' . $r, $row["lastname"]);
         $objPHPExcel->getActiveSheet()->setCellValue('C' . $r, $row["firstname"]);

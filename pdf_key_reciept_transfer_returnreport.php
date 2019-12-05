@@ -58,7 +58,7 @@ foreach ($id as $val){
 	$query = "SELECT * FROM key_database WHERE dataid = $val";
 	$result = @mysqli_query($dbc, $query);
 
-	while($row = $result->fetch_assoc()) {
+	while($row = mysqli_fetch_assoc($result)) {
 		$idlink= $row["idlink"];
 		$sql = "SELECT * FROM department WHERE idlink = $idlink";
 		$res = mysqli_query($dbc, $sql);
@@ -84,7 +84,7 @@ foreach ($id as $val){
 		$pdf->Multicell(70,5,"ISO: " . $row['iso']."\n ",'R','L',0);
 
 		$pdf-> SetXY($x,$y+25);
-		$pdf->Multicell(120,5,"Department: " . $row['department']."\n ",'L','L',0);
+		$pdf->Multicell(120,5,"Department: " . $row2['dep'] ."\n ",'L','L',0);
 		$pdf-> SetXY($x+120,$y+25);
 		$pdf->Multicell(70,5,"\n ",'R','L',0);
 

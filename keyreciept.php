@@ -67,9 +67,9 @@ foreach ($id as $val){
 		$pdf->Multicell(70,5,"ISO: " . $row['iso']."\n ",'R','L',0);
 
 		$pdf-> SetXY($x,$y+25);
-		$pdf->Multicell(120,5,"Department: " . $row['department']."\n ",'L','L',0);
+		$pdf->Multicell(120,5,"Department: " . $row2['dep']."\n ",'L','L',0);
 		$pdf-> SetXY($x+120,$y+25);
-		/*$pdf->Multicell(70,5,"Cost Center: ".$row["costcenter"]."\n ",'R','L',0);*/
+		$pdf->Multicell(70,5,"\n ",'R','L',0);
 
 		$pdf-> SetXY($x,$y+35);
 		$pdf->Multicell(120,5,"Dept. Building: " . $row2["empbld"]."\n ",'L, B','L',0);

@@ -79,6 +79,9 @@ require('includes/PHPExcel-1.8/Classes/PHPExcel.php');
     $filename='';
      while ($row = mysqli_fetch_assoc($result)) {
         $filename = $department . ".xlsx";
+         
+        $filename = str_replace(',',' -',$filename); 
+        
         $objPHPExcel->getActiveSheet()->setCellValue('A' . $r, $row["status"]);
         $objPHPExcel->getActiveSheet()->setCellValue('B' . $r, $row["lastname"]);
         $objPHPExcel->getActiveSheet()->setCellValue('C' . $r, $row["firstname"]);

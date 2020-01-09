@@ -283,7 +283,7 @@
 			<tr>
 				<th>Department</th>
 				<td>
-				<select name = "department" id = "department" onchange = "autoFill(this[selectedIndex].text)">
+				<select name = "department" id = "department" onchange = "autoFill(this[selectedIndex].value)">
 				<option></option>
 				<?php
 				$q = "SELECT * FROM department ORDER BY dep";
@@ -405,7 +405,7 @@ function autoFill(dep){
 	xmlhttp.onreadystatechange = function(){
 		if (xmlhttp.readyState == 4 && xmlhttp.status == 200){
 			var returnval = JSON.parse(this.responseText);
-			document.getElementById("costcenter").value = returnval[0];
+			document.getElementById("idlink").value = returnval[0];
 			document.getElementById("empbld").value = returnval[1];
 			document.getElementById("emprm").value = returnval[2];
 
@@ -487,7 +487,7 @@ function change(){
 		dataType: "JSON",
 		success: function(data){
 			var arr = data;
-		//	console.log(arr);
+			console.log(arr);
 			if(arr[0]=="tags"){
 				// this condition only modifies the tag input to change it to a dropdown when there are multiple tags associated with the given name
 				var select = '<select class = "search" name = "tag" id = "tagsearch" onchange = "tagChange()"><option value = "">Tags</option></select>';
@@ -507,10 +507,10 @@ function change(){
 				document.getElementById('tag').value = arr[0];
 				document.getElementById('employeenum').value = arr[1];
 				document.getElementById('iso').value = arr[2];
-
+                console.log(arr);
 				var x = document.getElementById("department").options;
 				   for(var i=0;i<x.length;i++){
-				        if(x[i].text==arr[3]){
+				        if(x[i].value==arr[5]){
 				            x[i].selected=true;
 				            break;
 				   }
@@ -524,7 +524,7 @@ function change(){
 }
 				//document.getElementById('tag').value = arr[3];
 				//document.getElementById('tag').value = arr[4];
-				document.getElementById('costcenter').value = arr[5];
+				document.getElementById('idlink').value = arr[5];
 				document.getElementById('emprm').value = arr[6];
 				document.getElementById('empbld').value = arr[7];
 			}
@@ -535,9 +535,9 @@ function tagChange(){
 	var tag = document.getElementById('tagsearch').value;
 	$.ajax({
 		type: 'post',
-		url:"add_key_ajax.php",
+		url: "add_key_ajax.php",
 		data:{
-			fname:firstname,
+			fname: firstname,
 			lname: lastname,
 			tag:tag
 		},

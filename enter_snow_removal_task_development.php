@@ -210,13 +210,14 @@ body{
 					 $('#arr').val(JSON.stringify(jsarray)),
 				);
 	}
-	function updateEquipment(){
-		var select = document.getElementById("employee_select");
+    function updateWhenWorkerChanged(){
+        var select = document.getElementById("employee_select");
 		var equipments = document.getElementById("equip");
 		var workerId = select.options[select.selectedIndex].value;
+        
 		$.ajax({
 			type:'post',
-			url: 'update_equipment_ajax.php',
+			url: 'update_when_worker_changed_ajax.php',
 			data:{
 				workerId:workerId
 			},
@@ -226,7 +227,7 @@ body{
 				equipments.options[data-1].selected = true;
 			}
 		});
-	}
+    }
 
 	function insertNewEquip(){
 		console.log("data");
@@ -267,7 +268,7 @@ function showNewEquipBox(){
 	document.getElementById("new_equip_sub").style.display = "inline";
 }
 </script>
-<body onload = "updateEquipment()">
+<body onload = "updateWhenWorkerChanged()">
 	<div>
 	<img src="norse.jpeg" style="width:150px; position: absolute; right: 3.5%; top: 3.5%;">
 	</div>
@@ -284,7 +285,7 @@ function showNewEquipBox(){
 	echo '<table class="table table-striped table-bordered table-hover table-condensed" style = "margin:auto;">';
 	if($purpose == "create")
 	{
-		echo '<tr><th>Worker:<span class="error"><sup>*</sup></span></th><td><select name = "employee_select" id = "employee_select" onchange = "updateEquipment()">';
+		echo '<tr><th>Worker:<span class="error"><sup>*</sup></span></th><td><select name = "employee_select" id = "employee_select" onchange = "updateWhenWorkerChanged()">';
 		$q = "SELECT user_id, first_name, last_name FROM users WHERE snowteam ='1' ORDER BY last_name";
 		$rs = @mysqli_query($dbc, $q);
 		while($row = mysqli_fetch_array($rs))
@@ -330,7 +331,7 @@ function showNewEquipBox(){
 
 		echo '<tr><th ><span id = "area-icon" style= "font-size:20px;" onclick="showAreas();">&#43;</span> Areas:<span class="error">*</span></th>';
 
-		echo '<td id = "area-toggle" style = "display:inline"><input type="checkbox" checked onclick="toggle(this);" /><b>Toggle Checkboxes</b><br /><br /><div id = "areas" name = "areas" size="12"></div>';
+		echo '<td id = "area-toggle" style = "display:inline"><input type="checkbox" checked onclick="toggle(this);" /><b>Toggle All Checkboxes</b><br /><br /><div id = "areas" name = "areas" size="12"></div>';
 		echo '</td>';
 		echo '</tr>';
 		echo '<tr><th>Equipment:</th>';
@@ -372,7 +373,7 @@ function showNewEquipBox(){
 		echo '</select>';
 		echo '  <button type="button" id = "new_equip_btn" onClick="showNewEquipBox()">New</button>  ';
 		echo '<input type = "text"  id = "new_equip" style = "display:none">';
-		echo '<button type="button" id = "new_equip_sub" style = "display:none"onClick="insertNewEquip()">Submit</button>  ';
+		echo '<button type="button" id = "new_equip_sub" style = "display:none"onClick="insertNewEquip()">Submit</button>';
 		echo '</td>';
 		echo '</tr>';
 		echo '<tr><th>Description:</th>';

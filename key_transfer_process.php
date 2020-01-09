@@ -214,7 +214,7 @@ if (isset($_POST['transfer'])){
           <?php
             $rs = mysqli_query($dbc, "SELECT dep FROM department");
             while($row = mysqli_fetch_array($rs)){
-              echo "<option id= '".$row['dep']."'>".$row['dep']."</option>";
+              echo "<option id= '".$row['dep']."' value= '". $row['dep'] ."'>".$row['dep']."</option>";
             }
           ?>
         </select>

@@ -17,7 +17,7 @@ session_start(); // Start the session.
 	if (isset ($_GET['w'])){
 		$department = $_GET['w'];
 		// Cost center 
-		$q1 = "SELECT DISTINCT costcenter FROM department WHERE dep = '$department'";
+		$q1 = "SELECT DISTINCT idlink FROM department WHERE dep = '$department'";
 		$r1 = mysqli_query($dbc, $q1);
 		$cc;
 		while ($row1 = mysqli_fetch_array($r1)){

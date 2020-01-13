@@ -321,8 +321,8 @@ body{
 
 			<br>
 			<label>Search By: </label>
-			<input type = "checkbox" id = "check-tag" value = "tag">Tag</input>
-			<input type = "checkbox" id = "check-key" style = "margin-left: 10px" value = "keyname">Key</input>
+			<input type = "checkbox" id = "check-tag" value = "tag">Tag
+			<input type = "checkbox" id = "check-key" style = "margin-left: 10px" value = "keyname">Key
 			<!--<input type = "checkbox" id = "check-dep" style = "margin-left: 10px" value = "department">Department/Costcenter</input>-->
 
 			<hr>

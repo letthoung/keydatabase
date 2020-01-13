@@ -50,6 +50,112 @@ table, tr, td, th{
 </style>
 <body onload = "load()">
 <a href ="keydatabase.php" class = "btn btn-default" style ="margin-left: 70px;">Back</a>
+
+
+
+
+
+
+<form id = "key-search" action=" " method="post" name = "key-search" >
+    <input type="text" placeholder = 'Search' name = "name" id = "name">
+
+    <?php
+        /*$q = "SELECT DISTINCT lastname FROM key_database WHERE lastname != '' ORDER BY dataid";
+        $rs = @mysqli_query($dbc, $q);
+
+        mysqli_free_result($rs);*/
+    ?>
+    <select name = "keybld" class = "search-select" id = "keybld" style = "width:150px">
+    <option value = 'all' <?php if($keybld ==''){echo 'selected';}?>>All Buildings</option>
+    <?php
+    //#E0EFFF
+        $q = "SELECT DISTINCT keybld FROM key_database WHERE keybld != '' ORDER BY keybld";
+        $rs = @mysqli_query($dbc, $q);
+        while($row = mysqli_fetch_array($rs))
+        {
+            echo '<option value = "' . $row['keybld'] . '" ';
+            if($miscbrand != '' && $miscbrand == $row['keybld'])
+            {
+                echo ' selected ';
+            }
+            echo '>' . $row['keybld'] . '</option>';
+        }
+        mysqli_free_result($rs);
+    ?>
+    </select>
+    <select name = "department" class = "search-select" id = "department" style = "width:200px">
+            <option value = "all">Department<option>
+            <?php
+            $q = "SELECT dep, idlink FROM department ORDER BY dep";
+            $rs = @mysqli_query($dbc, $q);
+            while($ro = mysqli_fetch_array($rs))
+            {
+                echo '<option value = "' . $ro['idlink'] . '" ';
+                echo '>' . $ro['dep'] . '</option>';
+            }
+        mysqli_free_result($rs);
+    ?>
+    </select>
+
+    <select id = "disposition" class = "search-select" name = "disposition" style = "width: 200px">
+        <option value="all">Disposition</option>
+        <option value = "Processing"> Processing </option>
+        <option value = "Assigned"> Assigned </option>
+        <option value = "Returned"> Returned </option>
+        <option value = "Lost-Not-Paid"> Lost-Not Paid </option>
+        <option value = "Lost-Paid"> Lost-Paid </option>
+        <option value = "Lost-Stolen"> Lost-Stolen </option>
+        <option value = "Left University"> Left University</option>
+        <option value = "No Receipt"> No Receipt</option>
+    </select>
+
+    <br>
+    <label>Search By: </label>
+    <input type = "checkbox" id = "check-tag" value = "tag">Tag
+    <input type = "checkbox" id = "check-key" style = "margin-left: 10px" value = "keyname">Key
+    <!--<input type = "checkbox" id = "check-dep" style = "margin-left: 10px" value = "department">Department/Costcenter</input>-->
+
+    <hr>
+    <input type = "submit" class = "btn btn-default" name = "search-box" onClick = "filter()" >
+    <a href = "keydatabase.php" class="btn btn-default">Clear Search</a>
+    <br>
+</form>
+
+<script>
+	function filter(){
+		console.log("filter");
+		var tag = document.getElementById("check-tag");
+		var key = document.getElementById("check-key");
+		var dep = document.getElementById("check-dep");
+		var name = document.getElementById("name").text;
+		var count = 0;
+		if (tag.checked){
+			tag = tag.value;
+			count++;
+		}else{
+			tag = "";
+		}
+		if (key.checked){
+			key = key.value;
+			count++;
+		}else{
+			key = "";
+		}
+
+		var keySearch = document.getElementById("key-search");
+		keySearch.action = "search_by_lastname.php?tag="+tag+"&key="+key+"&count="+count;
+	}
+
+
+</script>
+
+
+
+
+
+
+
+
 <h1>Search Results</h1>
 <br>
 <div class = "container">
